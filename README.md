@@ -9,3 +9,7 @@
 Command to use:
 
     docker pull mottor1/zabbix-agent
+
+Grant zabbix to connect:
+
+    grant usage on *.* to 'zabbix'@'172.%.%.%' identified by 'zabbix';
