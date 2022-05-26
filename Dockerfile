@@ -1,5 +1,10 @@
 FROM zabbix/zabbix-agent:alpine-6.0-latest
 
+ENV ZBX_MYSQL_HOST=mysqlhost
+ENV ZBX_MYSQL_USER=zabbix
+ENV ZBX_MYSQL_PORT=3306
+ENV ZBX_MYSQL_PASS=pass
+
 USER root
 
 RUN apk --update add mysql-client \
