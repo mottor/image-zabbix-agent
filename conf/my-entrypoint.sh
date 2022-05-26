@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ ! -z $ZBX_MYSQL_HOST ]; then
+if [ -n $ZBX_MYSQL_HOST ]; then
   MY_CNF_FILE=/var/lib/zabbix/.my.cnf
 
   echo '[client]' > $MY_CNF_FILE
