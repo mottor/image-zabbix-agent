@@ -2,6 +2,10 @@
 
 if [ -n $ZBX_MYSQL_HOST ]; then
   MY_CNF_FILE=/var/lib/zabbix/.my.cnf
+  echo ""
+  echo "Updating .my.cnf"
+  echo "ZBX_MYSQL_HOST = $ZBX_MYSQL_HOST"
+  echo "ZBX_MYSQL_PASS = $ZBX_MYSQL_PASS"
 
   echo '[client]' > $MY_CNF_FILE
   echo "host=${ZBX_MYSQL_HOST}" >> $MY_CNF_FILE
