@@ -17,6 +17,7 @@ COPY conf/my-entrypoint.sh /usr/bin/my-entrypoint.sh
 RUN sed -i "s~^exec.*~source /usr/bin/my-entrypoint.sh\n\0~g" /usr/bin/docker-entrypoint.sh \
     && chown -R 1997 /etc/zabbix/zabbix_agentd.d \
     && chown -R 1997 /etc/zabbix/scripts \
-    && chmod 0755 -R /etc/zabbix/scripts
+    && chmod 0755 -R /etc/zabbix/scripts \
+    && echo '' > /var/lib/zabbix/.my.cnf && chown 1997:1997 /var/lib/zabbix/.my.cnf
 
 USER 1997
