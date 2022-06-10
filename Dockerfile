@@ -22,4 +22,7 @@ RUN chmod +x /usr/bin/docker-entrypoint.sh \
     && chmod 0755 -R /etc/zabbix/scripts
     ##&& echo '' > /var/lib/zabbix/.my.cnf && chown 1997:1997 /var/lib/zabbix/.my.cnf
 
+HEALTHCHECK --interval=10s --timeout=3s --start-period=2s --retries=5 \
+  CMD zabbix_agent2 -t agent.ping | grep -e '\[s|1\]' || exit 1
+
 USER 1997
