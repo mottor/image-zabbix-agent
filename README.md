@@ -2,7 +2,11 @@
 
 Образ zabbix-agent, который запускается в Docker.
 
-Особенности: имеет установленный mysql-client.
+Скопировано с https://github.com/zabbix/zabbix-docker/tree/6.0/Dockerfiles/agent2/alpine, т.к.
+нужно было внести изменения в docker-entrypoint.sh
+
+Особенности: 
+- имеет установленный mysql-client.
 
 [Docker Hub Link](https://hub.docker.com/r/mottor1/zabbix-agent)
 
@@ -29,7 +33,7 @@ Docker-compose:
      #- '$PWD/volumes/zabbix-agent/var/lib/zabbix/ssh_keys:/var/lib/zabbix/ssh_keys:ro'
      #deploy: {resources: {limits: {cpus: '0.2', memory: 128M}, reservations: {cpus: '0.1', memory: 64M}}, mode: global}
     env_file:
-     - .env_zabbix_agent
+     - .env_[zabbix]()_agent
     user: root
     privileged: true
     pid: host
