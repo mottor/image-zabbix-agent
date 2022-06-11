@@ -16,7 +16,7 @@ Command to use:
 
 Grant zabbix to connect:
 
-    grant usage on *.* to 'zabbix'@'172.%.%.%' identified by 'zabbix';
+    grant replication client on *.* to 'zabbix'@'172.%.%.%' identified by 'zabbix';
 
 Docker-compose:
 

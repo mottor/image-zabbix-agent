@@ -1,4 +1,4 @@
-FROM zabbix/zabbix-agent2:alpine-6.0-latest
+FROM zabbix/zabbix-agent:alpine-6.0-latest
 
 ENV ZBX_MYSQL_HOST=mysqlhost
 ENV ZBX_MYSQL_USER=zabbix
@@ -7,7 +7,7 @@ ENV ZBX_MYSQL_PASS=pass
 
 USER root
 
-RUN apk --update add mysql-client \
+RUN apk --update add mysql-client busybox-extras \
     && rm -rf /var/cache/apk/*
 
 COPY conf/docker-entrypoint.sh /usr/bin
@@ -22,7 +22,7 @@ RUN chmod +x /usr/bin/docker-entrypoint.sh \
     && chmod 0755 -R /etc/zabbix/scripts
     ##&& echo '' > /var/lib/zabbix/.my.cnf && chown 1997:1997 /var/lib/zabbix/.my.cnf
 
-HEALTHCHECK --interval=10s --timeout=3s --start-period=2s --retries=5 \
-  CMD zabbix_agent2 -t agent.ping | grep -e '\[s|1\]' || exit 1
+HEALTHCHECK --interval=10s --timeout=3s --start-period=1s --retries=5 \
+  CMD zabbix_agentd -t agent.ping | grep -e '\[u|1\]' || exit 1
 
 USER 1997
