@@ -216,14 +216,15 @@ if [ "$1" == '/usr/sbin/zabbix_agentd' ]; then
     prepare_agent
 fi
 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 if [ "$ZBX_MYSQL_HOST" != "" ]; then
   MY_CNF_FILE=/var/lib/zabbix/.my.cnf
 
   echo "[client]" > $MY_CNF_FILE
-  echo "host=${ZBX_MYSQL_HOST}" >> $MY_CNF_FILE
+  echo "host=${ZBX_MYSQL_HOST:-unset}" >> $MY_CNF_FILE
   echo "user=${ZBX_MYSQL_USER:-zabbix}" >> $MY_CNF_FILE
   echo "port=${ZBX_MYSQL_PORT:-3306}" >> $MY_CNF_FILE
-  echo "password=${ZBX_MYSQL_PASS}" >> $MY_CNF_FILE
+  echo "password=${ZBX_MYSQL_PASS:-unset}" >> $MY_CNF_FILE
 
   chown 1997:1995 $MY_CNF_FILE
   chmod 0600 $MY_CNF_FILE
@@ -235,6 +236,12 @@ echo " "
 grep -Ev ^'(#|$)' /etc/zabbix/zabbix_agentd.conf
 echo " "
 echo "================================================="
+
+# получаем адрес Шлюза, т.к. локальный zabbix-agent почему-то видит запросы от Сервера как от IP шлюза...
+GATEWAY_HOST="docker.custom.gateway"
+GATEWAY_IP=$(/sbin/ip route | awk '/default/ { print $3 }')
+echo -e "$GATEWAY_IP\t$GATEWAY_HOST" >> /etc/hosts
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 exec "$@"
 
