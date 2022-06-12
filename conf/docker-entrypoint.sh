@@ -21,6 +21,8 @@ ZABBIX_USER_HOME_DIR="/var/lib/zabbix"
 # Configuration files directory
 ZABBIX_ETC_DIR="/etc/zabbix"
 
+GATEWAY_IP=$(/sbin/ip route | awk '/default/ { print $3 }')
+
 escape_spec_char() {
     local var_value=$1
 
@@ -121,11 +123,11 @@ prepare_zbx_agent_config() {
 
     [ -n "$ZBX_PASSIVESERVERS" ] && ZBX_PASSIVESERVERS=","$ZBX_PASSIVESERVERS
 
-    ZBX_PASSIVESERVERS=$ZBX_SERVER_HOST$ZBX_PASSIVESERVERS
+    ZBX_PASSIVESERVERS=$ZBX_SERVER_HOST","GATEWAY_IP$ZBX_PASSIVESERVERS
 
     [ -n "$ZBX_ACTIVESERVERS" ] && ZBX_ACTIVESERVERS=","$ZBX_ACTIVESERVERS
 
-    ZBX_ACTIVESERVERS=$ZBX_SERVER_HOST":"$ZBX_SERVER_PORT$ZBX_ACTIVESERVERS
+    ZBX_ACTIVESERVERS=$ZBX_SERVER_HOST":"$ZBX_SERVER_PORT","GATEWAY_IP":"$ZBX_SERVER_PORT$ZBX_ACTIVESERVERS
 
     update_config_var $ZBX_AGENT_CONFIG "PidFile"
     update_config_var $ZBX_AGENT_CONFIG "LogType" "console"
@@ -237,10 +239,6 @@ grep -Ev ^'(#|$)' /etc/zabbix/zabbix_agentd.conf
 echo " "
 echo "================================================="
 
-# получаем адрес Шлюза, т.к. локальный zabbix-agent почему-то видит запросы от Сервера как от IP шлюза...
-GATEWAY_HOST="docker.custom.gateway"
-GATEWAY_IP=$(/sbin/ip route | awk '/default/ { print $3 }')
-echo -e "$GATEWAY_IP\t$GATEWAY_HOST" >> /etc/hosts
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 exec "$@"
