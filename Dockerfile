@@ -14,10 +14,10 @@ RUN apk --update add \
     busybox-extras \
     && rm -rf /var/cache/apk/*
 
-###COPY conf/docker-entrypoint.sh /usr/bin
+COPY conf/docker-entrypoint.sh /usr/bin
 COPY conf/zabbix_agentd.d /etc/zabbix/zabbix_agentd.d
 COPY conf/scripts /etc/zabbix/scripts
-COPY conf/entrypoint-addition.sh /usr/bin/entrypoint-addition.sh
+###COPY conf/entrypoint-addition.sh /usr/bin/entrypoint-addition.sh
 
 # пачтинг docker-entrypoint.sh
 # этой командой мы добавляем source <наша entrypoint>, чтобы добавить наш код в docker-entrypoint офф контейнера
